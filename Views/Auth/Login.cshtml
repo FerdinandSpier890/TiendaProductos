@@ -1,0 +1,206 @@
+﻿@model TiendaProductos.Models.Dto.LoginRequestDto
+
+@{
+    ViewData["Title"] = "Inicio de sesión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/site.css" rel="stylesheet" />
+
+<section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+
+                                <div class="text-center">
+                                    <h4 class="mt-1 mb-5 pb-1">Login :D</h4>
+                                </div>
+
+                                <form asp-action="Login" class="needs-validation" novalidate>
+                                    <p>Inicia Sesión en tu cuenta</p>
+
+                                    <div class="form-group">
+                                        <div class="mb-4">
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="background-color: #F3E9D2; border-color: #F3E9D2;"><i class="fas fa-user text-black"></i></span>
+                                                <input type="text" id="form2Example11" class="form-control"
+                                                       placeholder="Nombre de Usuario" asp-for="UserName" required>
+                                                <label class="form-label" for="form2Example11"></label>
+                                            </div>
+                                            <div class="invalid-feedback" id="userNameError">
+                                                Nombre de Usuario requerido
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="mb-4">
+                                            <div class="input-group">
+                                                <span class="input-group-text" style="background-color: #F3E9D2; border-color: #F3E9D2;"><i class="fas fa-lock text-black"></i></span>
+                                                <input type="password" id="form2Example22" class="form-control"
+                                                       placeholder="Contraseña" asp-for="Password" required>
+                                                <label class="form-label" for="form2Example22"></label>
+                                                <button type="button" class="btn btn-outline-secondary" onclick="togglePasswordVisibility()">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
+                                            <div class="invalid-feedback" id="passwordError">
+                                                Contraseña Requerida
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="text-center pt-1 mb-5 pb-1">
+                                        <button class="btn btn-primary btn-block fa-lg mb-3" type="submit">
+                                            <span><i class="fas fa-sign-in-alt text-white"></i></span>
+                                            Iniciar sesión
+                                        </button>
+                                        <br />
+                                        <a class="text-muted" href="#!">¿Olvidaste tu contraseña?</a>
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-center pb-4">
+                                        <p class="mb-0 me-2">¿No tienes una cuenta?</p>
+                                        <a type="button" class="btn btn-primary btn-block fa-lg mb-3" asp-area="" asp-controller="Auth" asp-action="Register">
+                                            <span><i class="fas fa-plus"></i></span>
+                                            Crear nueva
+                                        </a>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                <h4 class="mb-4">Holaa :D</h4>
+                                <p class="small mb-0">
+                                    Bievenido :D
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <!-- Toastr CDN (Asegúrate de incluir esto antes del código JavaScript existente) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        // Agregar validación personalizada
+        (function () {
+            'use strict';
+
+            var forms = document.querySelectorAll('.needs-validation');
+
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        displayErrorMessages(form);
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+        @if (!ViewData.ModelState.IsValid)
+        {
+            var errorMessage = ViewData.ModelState["CustomError"].Errors.FirstOrDefault().ErrorMessage;
+            <text>
+                $(document).ready(function () {
+                    toastr.error('@errorMessage', 'Error');
+                });
+            </text>
+        }
+
+        @if (TempData["WelcomeMessage"] != null)
+        {
+            var welcomeMessage = TempData["WelcomeMessage"].ToString();
+            <text>
+                $(document).ready(function () {
+                    toastr.success('@welcomeMessage', 'Bienvenido');
+                    // Redireccionar después de 5 segundos (5000 milisegundos)
+                    setTimeout(function () {
+                        window.location.href = '@Url.Action("PedidosPorProveedor", "Pedidos")';
+                    }, 5000); // 5000 ms = 5 segundos
+                });
+            </text>
+        }
+
+        // Mostrar mensaje de SweetAlert en caso de error
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            var errorMessage = ViewData["ErrorMessage"].ToString();
+            <text>
+                swal.fire({
+                    icon: 'error',
+                    title: '¡Ups...',
+                    text: '@errorMessage',
+                });
+            </text>
+        }
+
+            // Función para mostrar/ocultar la contraseña
+            function togglePasswordVisibility() {
+                var passwordInput = document.getElementById("form2Example22");
+                var passwordVisibilityButton = document.querySelector(".btn-outline-secondary i");
+
+                if (passwordInput.type === "password") {
+                    passwordInput.type = "text";
+                    passwordVisibilityButton.classList.remove("fa-eye");
+                    passwordVisibilityButton.classList.add("fa-eye-slash");
+                } else {
+                    passwordInput.type = "password";
+                    passwordVisibilityButton.classList.remove("fa-eye-slash");
+                    passwordVisibilityButton.classList.add("fa-eye");
+                }
+            }
+
+        // Función para validar el formulario antes de enviarlo
+        function validateForm(event) {
+            var form = document.querySelector('.needs-validation');
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                displayErrorMessages(form);
+            }
+
+            form.classList.add('was-validated');
+        }
+
+        // Función para mostrar los mensajes de error debajo de los campos de entrada
+        function displayErrorMessages(form) {
+            var userNameInput = form.querySelector("#form2Example11");
+            var passwordInput = form.querySelector("#form2Example22");
+            var userNameError = form.querySelector("#userNameError");
+            var passwordError = form.querySelector("#passwordError");
+
+            if (!userNameInput.validity.valid) {
+                userNameError.style.display = "block";
+            } else {
+                userNameError.style.display = "none";
+            }
+
+            if (!passwordInput.validity.valid) {
+                passwordError.style.display = "block";
+            } else {
+                passwordError.style.display = "none";
+            }
+        }
+    </script>
+
+}

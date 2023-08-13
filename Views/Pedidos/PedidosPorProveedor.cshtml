@@ -1,0 +1,460 @@
+﻿@{
+    ViewData["Title"] = "Artículos";
+}
+
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f8f8f8;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    h1 {
+        color: #333;
+        font-size: 32px;
+    }
+
+    h3 {
+        color: #1A936F;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    #proveedorDropdown {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        #proveedorDropdown option {
+            font-size: 14px;
+        }
+
+    #articulosContainer {
+        margin-bottom: 100px;
+    }
+
+    .dataTable {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 1rem;
+        border: 1px solid #ccc;
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+    }
+
+        .dataTable th,
+        .dataTable td {
+            padding: 0.75rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .dataTable thead th {
+            background-color: #1A936F;
+            color: #fff;
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+            font-weight: bold;
+        }
+
+        .dataTable tbody + tbody {
+            border-top: 2px solid #dee2e6;
+        }
+
+        .dataTable td {
+            line-height: 1.5;
+        }
+
+    /* Estilos para los tickets */
+    .ticket {
+        flex: 0 0 calc(50% - 20px);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+    }
+
+        .ticket h3 {
+            margin: 0;
+            color: #1A936F;
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .ticket p {
+            margin: 0;
+            color: #000;
+            font-size: 18px;
+        }
+
+        /* Nuevos estilos para los tickets al pasar el ratón */
+        .ticket:hover {
+            box-shadow: 0 4px 8px rgba(26, 147, 111, 1);
+        }
+
+    /* Estilos para el botón de perfil */
+    .profile-button {
+        background-color: transparent;
+        border: none;
+        color: #1A936F;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+    .user-icon {
+        margin-right: 8px;
+    }
+
+    /* Estilos para toastr */
+    .toast {
+        font-size: 14px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    /* Estilos para la tarjeta del proveedor */
+    .proveedor-card-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .ticket.proveedor {
+        flex: 0 0 calc(50% - 20px);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px;
+        background-color: #f9f9f9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease-in-out;
+        text-align: left;
+    }
+
+        .ticket.proveedor h3 {
+            margin: 0;
+            color: #1A936F;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .ticket.proveedor p {
+            margin: 0;
+            color: #000;
+            font-size: 16px;
+        }
+</style>
+
+
+
+<div class="page-container" style="border-color: #146b63;">
+    <div class="page-header">
+        <h1>Consulta de Artículos</h1>
+        <div class="dropdown">
+            <select id="proveedorDropdown">
+                <option value="">Seleccione un proveedor</option>
+                <!-- Agregar aquí las opciones de proveedores -->
+            </select>
+            <div class="dropdown-menu">
+                <!-- Agregar aquí las opciones del menú desplegable -->
+            </div>
+        </div>
+        <div class="proveedor-card-container">
+            <div class="container-card ticket" id="proveedorCard"></div>
+        </div>
+    </div>
+</div>
+
+<br /> 
+
+<div class="container-card ticket-container" id="articulosContainer">
+    <table id="articulosTable" class="dataTable">
+        <thead>
+            <tr>
+                <th><i class="fas fa-info-circle"></i> Descripción</th>
+                <th><i class="fas fa-barcode"></i> Código de Barras</th>
+                <th><i class="fas fa-link"></i> Código Asociado</th>
+                <th><i class="fas fa-user"></i> Código del Proveedor</th>
+                <th><i class="fas fa-dollar-sign"></i> Precio de Compra</th>
+                <th><i class="fas fa-percent"></i> Utilidad</th>
+                <th><i class="fas fa-money-bill-alt"></i> Precio de Venta</th>
+                <th><i class="fas fa-tags"></i> Tipo de Artículo</th>
+                <th><i class="fas fa-box"></i> Stock</th>
+                <th><i class="fas fa-sort-amount-down"></i> Stock Mínimo</th>
+                <th><i class="fas fa-sort-amount-up"></i> Stock Máximo</th>
+                <th><i class="fas fa-percentage"></i> IVA</th>
+                <th><i class="fas fa-key"></i> Clave de Producto</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los artículos se llenarán aquí dinámicamente -->
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var proveedores; // Declara la variable proveedores en un ámbito más amplio
+
+            
+
+            // Cargar proveedores al cargar la página
+            cargarProveedores();
+
+
+            // Este bloque de código se ejecuta cuando cambia la selección en el dropdown de proveedores.
+            $('#proveedorDropdown').on('change', function () {
+                // Obtiene el valor seleccionado en el dropdown, que corresponde al ID del proveedor.
+                var proveedorId = $(this).val();
+
+                // Verifica si se ha seleccionado un proveedor.
+                if (proveedorId) {
+                    // Obtiene el token de autenticación del usuario desde las cookies.
+                    var token = getCookie('JWTToken');
+
+                    // Verifica si hay un token presente (es decir, si el usuario ha iniciado sesión).
+                    if (!token) {
+                        // Si no hay token, muestra un mensaje de error indicando que se debe iniciar sesión.
+                        mostrarError('Error: Para realizar esta Acción, Primero debes de Iniciar Sesión.');
+                        return;
+                    }
+
+                    // Realiza una solicitud AJAX para obtener los artículos del proveedor seleccionado.
+                    $.ajax({
+                        url: `https://localhost:44388/api/Articulos?proveedorId=${proveedorId}`,
+                        type: 'GET',
+                        dataType: 'json',
+                        // Incluye el token de autorización en los encabezados de la solicitud.
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        },
+                        // Si la solicitud es exitosa, se ejecuta esta función de éxito.
+                        success: function (data) {
+                            // Muestra un mensaje indicando que los artículos se han cargado correctamente.
+                            mostrarMensaje("Se Mostraron los Articulos Correctamente");
+
+                            // Llama a la función mostrarArticulos para mostrar los artículos en la página.
+                            mostrarArticulos(data);
+
+                            // Llama a la función mostrarProveedor para mostrar la tarjeta del proveedor seleccionado.
+                            mostrarProveedor(proveedorId);
+                        },
+                        // Si la solicitud presenta un error, se ejecuta esta función de error.
+                        error: function (xhr, status, error) {
+                            // Muestra un mensaje de error indicando que hubo un problema en la consulta de artículos.
+                            mostrarError('Error en la consulta de los artículos.');
+
+                            // Muestra información detallada del error en la consola para fines de depuración.
+                            console.log(error);
+                        }
+                    });
+                } else {
+                    // Si no se ha seleccionado ningún proveedor, se vacía el contenedor de artículos.
+                    $('#articulosTable').empty();
+                    $('#proveedorCard').empty();
+                }
+            });
+
+
+            function cargarProveedores() {
+                // Obtiene el token de autenticación del usuario desde las cookies.
+                var token = getCookie('JWTToken');
+
+                // Verifica si hay un token presente (es decir, si el usuario ha iniciado sesión).
+                if (!token) {
+
+                    // Si no hay token, muestra un mensaje de error indicando que se debe iniciar sesión.
+                    mostrarError('Error: No se pueden Mostrar los Proveedores porque primero debes de Iniciar Sesión.');
+                    return;
+                 }
+
+                // Se utiliza AJAX para realizar una solicitud GET a la URL de la API de proveedores.
+                $.ajax({
+                    url: 'https://localhost:44355/api/Proveedores',
+                    type: 'GET',
+                    dataType: 'json',
+                    // Incluye el token de autorización en los encabezados de la solicitud.
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    // Si la solicitud es exitosa, se ejecuta esta función de éxito.
+                    success: function (data) {
+
+                         proveedores = data;
+
+                        // Se muestra un mensaje indicando que los proveedores se han cargado correctamente.
+                        mostrarMensaje("Se Mostraron los Proveedores Correctamente");
+
+                        // Se llama a la función llenarDropdown para agregar los proveedores al dropdown.
+                        llenarDropdown(data);
+
+                        // Llamar a mostrarProveedor después de cargar los proveedores
+                        mostrarProveedor($('#proveedorDropdown').val());
+                    },
+                    // Si la solicitud presenta un error, se ejecuta esta función de error.
+                    error: function (xhr, status, error) {
+                        // Se muestra un mensaje de error indicando que hubo un problema en la consulta de proveedores.
+                        mostrarError('Error en la consulta de proveedores.');
+
+                        // Se muestra información detallada del error en la consola para fines de depuración.
+                        console.log(error);
+                    }
+                });
+            }
+
+
+
+            // Esta función recibe una lista de proveedores y los agrega dinámicamente como opciones en un elemento de lista desplegable (dropdown).
+            function llenarDropdown(proveedores) {
+                // Seleccionamos el elemento del dropdown por su ID.
+                var dropdown = $('#proveedorDropdown');
+
+                // Limpiamos todas las opciones existentes en el dropdown.
+                dropdown.empty();
+
+                // Agregamos una opción por defecto al dropdown.
+                dropdown.append('<option value="">Seleccione un proveedor</option>');
+
+                // Recorremos la lista de proveedores y agregamos cada uno como una opción en el dropdown.
+                proveedores.forEach(function (proveedor) {
+                    // Usamos los datos del proveedor (id_Proveedor y razon_Social) para crear la opción.
+                    dropdown.append(`<option value="${proveedor.id_Proveedor}">${proveedor.razon_Social}</option>`);
+                });
+            }
+
+            // Esta función se encarga de mostrar los artículos en el contenedor de artículos.
+            function mostrarArticulos(articulos) {
+                // Obtén la referencia a la tabla en el DOM.
+                var tablaArticulos = $('table.dataTable tbody');
+
+                // Vacía la tabla para asegurarte de que esté limpia antes de agregar nuevos artículos.
+                tablaArticulos.empty();
+
+                // Itera a través de cada artículo recibido y agrega una fila en la tabla por cada uno.
+                articulos.forEach(function (articulo) {
+                    // Crea la fila de la tabla con información del artículo.
+                    var filaHTML = `
+                                <tr>
+                                    <td>${articulo.descripcion}</td>
+                                    <td>${articulo.cod_Barras}</td>
+                                    <td>${articulo.cod_Asociado}</td>
+                                    <td>${articulo.id_Proveedor}</td>
+                                    <td>$${articulo.precio_Compra}</td>
+                                    <td>$${articulo.utilidad}</td>
+                                    <td>$${articulo.precio_Venta}</td>
+                                    <td>${articulo.tipo_Articulo}</td>
+                                    <td>${articulo.stock}</td>
+                                    <td>${articulo.stock_Min}</td>
+                                    <td>${articulo.stock_Max}</td>
+                                    <td>${articulo.iva}</td>
+                                    <td>${articulo.cve_Producto}</td>
+                                </tr>
+                            `;
+
+
+                    // Agrega la fila a la tabla de artículos.
+                    tablaArticulos.append(filaHTML);
+                });
+            }
+            // Esta función recibe el nombre de una cookie como parámetro y devuelve el valor de la cookie correspondiente.
+            function getCookie(name) {
+                // Obtenemos todas las cookies almacenadas en el navegador.
+                var value = '; ' + document.cookie;
+
+                // Dividimos las cookies en partes separadas por "; nombre=" para encontrar la cookie deseada.
+                var parts = value.split('; ' + name + '=');
+
+                // Si encontramos la cookie deseada, obtenemos su valor y lo devolvemos.
+                if (parts.length === 2) {
+                    // Usamos split(';') para eliminar cualquier información adicional en la cookie.
+                    return parts.pop().split(';').shift();
+                }
+
+                // Si no se encontró la cookie, retornamos null.
+                return null;
+            }
+
+            function mostrarError(error) {
+                toastr.error(error, "401");
+            }
+
+            function mostrarMensaje(mensaje) {
+                toastr.success(mensaje, "200");
+            }
+
+            // Esta función se encarga de mostrar la tarjeta del proveedor seleccionado.
+            function mostrarProveedor(proveedorId) {
+                // Busca el proveedor seleccionado en la lista de proveedores (puedes reemplazar esto con tu propia lógica).
+                var proveedorSeleccionado = proveedores.find(function (proveedor) {
+                    return proveedor.id_Proveedor === proveedorId;
+                });
+
+                if (proveedorSeleccionado) {
+                    // Genera el HTML de la tarjeta del proveedor seleccionado.
+                    var proveedorCardHTML = `
+                            <div class="ticket proveedor">
+                                <h3>${proveedorSeleccionado.razon_Social}</h3>
+                                        <p><strong>Código del Proveedor:</strong> ${proveedorSeleccionado.id_Proveedor}</p>
+                                        <p><strong>RFC:</strong> ${proveedorSeleccionado.rfc}</p>
+                                        <p><strong>Nombre de Contacto:</strong> ${proveedorSeleccionado.nombre_Contacto}</p>
+                                        <p><strong>Teléfono Principal:</strong> ${proveedorSeleccionado.tel_Principal}</p>
+                                        <p><strong>Teléfono Móvil:</strong> ${proveedorSeleccionado.tel_Movil}</p>
+                                        <p><strong>Correo Electrónico:</strong> ${proveedorSeleccionado.e_mail}</p>
+                                        <p><strong>Estatus:</strong> ${proveedorSeleccionado.estatus}</p>
+                                        <p><strong>Fecha de Registro:</strong> ${new Date(proveedorSeleccionado.fecha_Registro).toLocaleString('es-ES', {
+                                            weekday: 'long',
+                                            day: 'numeric',
+                                            month: 'long',
+                                            year: 'numeric',
+                                            hour: 'numeric',
+                                            minute: 'numeric',
+                                            second: 'numeric'
+                                        })}</p>
+                            </div>
+                        `;
+
+                    // Agrega la tarjeta del proveedor al contenedor correspondiente.
+                    $('#proveedorCard').html(proveedorCardHTML);
+                }
+            }
+        });
+    </script>
+}

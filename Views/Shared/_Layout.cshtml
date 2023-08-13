@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TiendaProductos</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/TiendaProductos.styles.css" asp-append-version="true" />
+    <!-- Enlazar Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Toastr CDN (Asegúrate de incluir esto antes del código JavaScript existente) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" integrity="sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+<style>
+    .profile-button {
+        background-color: transparent;
+        border: none;
+        color: #333;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
+
+        .profile-button:hover {
+            color: #555;
+        }
+
+        .profile-button .user-icon {
+            font-size: 24px;
+            margin-right: 5px;
+        }
+
+    .hover-color:hover {
+        background-color: #F3E9D2;
+        border: 10px solid #F3E9D2;
+        border-radius: 10px;
+    }
+
+        .hover-color:hover i {
+            color: #114B5F;
+        }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100px;
+        padding: 20px 0; /* Ajusta este padding según tus necesidades */
+        
+    }
+</style>
+<body style="padding-bottom: 100px;">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-store" style="color: #1A936F"></i> TiendaProductos
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home" style="color: #1A936F"></i> Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">
+                                <i class="fas fa-lock" style="color: #1A936F"></i> Privacy
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">
+                                <i class="fas fa-sign-in-alt" style="color: #1A936F"></i> Inicia Sesión
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Register">
+                                <i class="fas fa-user-plus" style="color: #1A936F"></i> Crear Cuenta
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Pedidos" asp-action="PedidosPorProveedor">
+                                <i class="fas fa-search" style="color: #1A936F"></i> Consultar Articulos
+                            </a>
+                        </li>
+
+                    </ul>
+                    <!-- Agregar el botón de perfil con opción de cerrar sesión -->
+                    <div class="d-flex align-items-center">
+                        
+                        <button type="button" class="profile-button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user user-icon"></i>
+                            @ViewBag.UserName <!-- Leer el nombre de usuario desde ViewBag -->
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" asp-area="" asp-controller="Auth" asp-action="Logout">
+                                    <i class="fas fa-sign-out-alt" style="color: #1A936F"></i> Cerrar sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 text-center text-md-left" style="font-size: 20px">
+                    <h4 class="white--text">Hecho por</h4>
+                    <p class="white--text">Fernando Sánchez Noguez :D</p>
+                </div>
+                <div class="col-md-4 text-center" style="font-size: 20px;">
+                    <h4 class="white--text">Redes Sociales</h4>
+                    <a href="https://www.facebook.com/Lord.Peacock.890/" target="_blank" class="btn btn-indigo mx-2 hover-color"
+                       style="height: 55px; width: 55px; border: 5px solid #114B5F; background-color: #1A936F;">
+                        <i class="fab fa-facebook fa-2x" style="color: #F3E9D2;"></i>
+                    </a>
+                    <a href="https://www.instagram.com/iam_lordp890/" target="_blank" class="btn btn-indigo mx-2 hover-color"
+                       style="height: 55px; width: 55px; border: 5px solid #114B5F; background-color: #1A936F;">
+                        <i class="fab fa-instagram fa-2x" style="color: #F3E9D2;"></i>
+                    </a>
+                    <a href="https://pin.it/610vSg5" target="_blank" class="btn btn-indigo mx-2 hover-color"
+                       style="height: 55px; width: 55px; border: 5px solid #114B5F; background-color: #1A936F;">
+                        <i class="fab fa-pinterest fa-2x" style="color: #F3E9D2;"></i>
+                    </a>
+                    <a href="https://www.tumblr.com/blog/renardrouge890" target="_blank" class="btn btn-indigo mx-2 hover-color"
+                       style="height: 55px; width: 55px; border: 5px solid #114B5F; background-color: #1A936F;">
+                        <i class="fab fa-tumblr fa-2x" style="color: #F3E9D2;"></i>
+                    </a>
+                    <a href="https://github.com/FerdinandSpier890" target="_blank" class="btn btn-indigo mx-2 hover-color"
+                       style="height: 55px; width: 55px; border: 5px solid #114B5F; background-color: #1A936F;">
+                        <i class="fab fa-github fa-2x" style="color: #F3E9D2;"></i>
+                    </a>
+                </div>
+                <div class="col-md-4 text-center text-md-right" style="font-size: 20px">
+                    <h4 class="white--text">Contacto</h4>
+                    <p class="white--text">Correo electrónico: 20300019@uttt.edu.mx</p>
+                    <p class="white--text">
+                        Teléfono:
+                        <a href="https://api.whatsapp.com/send?phone=527732265327&text=Hola,%20quiero%20enviar%20un%20mensaje"
+                           target="_blank">+52 (773) 226-5327</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" integrity="sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

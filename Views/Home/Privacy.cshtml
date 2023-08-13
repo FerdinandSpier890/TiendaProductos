@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Política de Privacidad";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+            <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
+            <div class="privacy-content">
+                <p>Tu privacidad es importante para nosotros. Es nuestra política respetar tu privacidad en relación con cualquier información que podamos recopilar de ti a través de nuestro sitio web.</p>
+
+                <p>Solo solicitamos información personal cuando realmente la necesitamos para brindarte un servicio. La recopilamos de manera justa y legal, con tu conocimiento y consentimiento. También te informamos por qué la estamos recopilando y cómo se utilizará.</p>
+
+                <p>Retenemos la información recopilada solo durante el tiempo necesario para brindarte el servicio solicitado. Los datos que almacenamos los protegeremos de manera comercialmente aceptable para evitar pérdidas y robos, así como acceso no autorizado, divulgación, copia, uso o modificación.</p>
+
+                <p>No compartimos ninguna información de identificación personal públicamente ni con terceros, excepto cuando la ley lo requiera.</p>
+
+                <p>Nuestro sitio web puede enlazar a sitios externos que no son operados por nosotros. Ten en cuenta que no tenemos control sobre el contenido y las prácticas de estos sitios, y no podemos aceptar responsabilidad por sus respectivas políticas de privacidad.</p>
+
+                <p>Eres libre de rechazar nuestra solicitud de tu información personal, con la comprensión de que es posible que no podamos brindarte algunos de los servicios deseados.</p>
+
+                <p>El uso continuado de nuestro sitio web se considerará como aceptación de nuestras prácticas en torno a la privacidad y la información personal. Si tienes alguna pregunta sobre cómo manejamos los datos de los usuarios y la información personal, no dudes en contactarnos.</p>
+
+                <p>Esta política es efectiva a partir de <span id="fechaActual"></span>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Obtiene la fecha actual en el formato deseado.
+    function obtenerFechaActual() {
+        const fecha = new Date();
+        return fecha.toLocaleString('es-ES', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        });
+    }
+
+    // Actualiza el contenido del elemento con la fecha actual formateada.
+    document.getElementById('fechaActual').textContent = obtenerFechaActual();
+</script>
